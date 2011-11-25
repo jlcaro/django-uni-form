@@ -99,8 +99,12 @@ class BasicNode(template.Node):
             else:
                 forloop = ForLoopSimulator(actual_form)
                 for form in actual_form.forms:
+                    if hasattr(form, 'helper') and form.helper.layout:
+                        fhelper = form.helper
+                    else:
+                        fhelper = helper
                     context.update({'forloop': forloop})
-                    form.form_html = helper.render_layout(form, context)
+                    form.form_html = fhelper.render_layout(form, context)
                     forloop.iterate()
 
         if is_formset:
